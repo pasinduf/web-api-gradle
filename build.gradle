@@ -1,0 +1,43 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.1.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+	id 'eclipse'
+}
+
+group = 'com.webapi.main'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+def springProfile = 'default'
+if (System.getenv('PROFILE') != null) {
+    springProfile = System.getenv('PROFILE').toString()
+}
+if (project.hasProperty('PROFILE')) {
+    springProfile = project.property('PROFILE').toString()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+    compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.5'
+    compile 'org.apache.commons:commons-lang3:3.6'
+	compile 'org.springframework.boot:spring-boot-starter-test'
+ 	compile 'org.apache.commons:commons-text:1.1'
+ 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
+}
+
+bootRun {
+    bootRun.systemProperty 'spring.profiles.active', "${springProfile}"
+}
+
+test {
+	useJUnitPlatform()
+}
